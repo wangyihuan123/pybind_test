@@ -15,7 +15,8 @@ include_directories(${pybind11_INCLUDE_DIR})
 include_directories(${PYTHON_INCLUDE_DIRS})
  
 SET(SOURCES
-  ${CMAKE_CURRENT_SOURCE_DIR}/example.cpp
+#  ${CMAKE_CURRENT_SOURCE_DIR}/example.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/tkDNN_detection.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/ndarray_converter.cpp
 )
  
