@@ -15,9 +15,13 @@
 #include "ndarray_converter.h"
 
 #include <vector>
-//#include "Yolo3Detection.h"
+#include "Yolo3Detection.h"
 
 namespace py = pybind11;
+
+
+    tk::dnn::Yolo3Detection yolo;
+    tk::dnn::DetectionNN *detNN = &yolo;
 
 void show_image(cv::Mat image)
 {
@@ -90,13 +94,12 @@ py::list tkdnnDetect(cv::Mat& image){
 
     std::vector<cv::Mat> batch_dnn_input;
     batch_dnn_input.push_back(image);
-    detNN->update(batch_dnn_input, n_batch);
+    detNN->update(batch_dnn_input, 1);
 
     std::vector<std::vector<float>> result_vector;
     for (auto box: detNN->batchDetected[0]) {
-        result_vector.push_back(
-                std::vector<float> obj{box.prob, box.cl, box.x, box.y, box.w, box.h};
-        );
+	std::vector<float> obj{box.prob, box.cl, box.x, box.y, box.w, box.h};
+        result_vector.push_back(obj);
     }
     py::list detections = py::cast(result_vector);
 
@@ -108,9 +111,7 @@ PYBIND11_MODULE(example,m)
 {
     NDArrayConverter::init_numpy();
 
-    tk::dnn::Yolo3Detection yolo;
-    tk::dnn::DetectionNN *detNN = &yolo;
-    std::string tensorrt_file = "data/yolov4tiny_fp16_b1.rt";
+    std::string tensorrt_file = "data/yolo4tiny_fp16_b4.rt";
     int n_classes = 80;
     int n_batch = 1;
     float conf_thresh = 0.2; // todo: change to your own

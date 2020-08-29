@@ -1,5 +1,6 @@
-from build import example
 import cv2
+import example
+
 
 print(cv2.__version__)
 
